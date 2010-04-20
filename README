@@ -1,1 +1,3 @@
 Rails 3 Sequel integration
+
+Based on rails_sequel by Piotr Usewicz: http://github.com/pusewicz/rails_sequel
