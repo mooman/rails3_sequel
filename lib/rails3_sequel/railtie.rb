@@ -1,3 +1,4 @@
+require 'pp'
 require 'rails'
 require 'active_model/railtie'
 
@@ -8,13 +9,20 @@ require 'active_model/railtie'
 require "action_controller/railtie"
 
 require 'sequel'
-require 'rails3_sequel/database_connection'
+require File.dirname(__FILE__) + '/database'
 
 module Rails
   module Sequel
     class Railtie < Rails::Railtie
+      config.generators.orm :sequel, :migration => true, :timestamps => false
+
       rake_tasks do
-        load 'rails3_sequel/railties/database.rake'
+        load File.dirname(__FILE__) + '/railties/database.rake'
+      end
+
+      initializer 'sequel.initialize_database' do |app|
+        Rails::Sequel::Database.configurations = app.config.database_configuration
+        Rails::Sequel::Database.connect
       end
     end
   end
