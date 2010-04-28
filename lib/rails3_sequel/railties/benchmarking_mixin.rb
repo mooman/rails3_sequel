@@ -1,10 +1,10 @@
 module Rails
   module Sequel
     module Benchmarking
-      def execute (sql, args=nil, &block)
+      def execute (sql, opts={})
         result = nil
         @runtime ||= 0
-        @runtime += Benchmark.ms { result = super(sql, args, &block) }
+        @runtime += Benchmark.ms { result = super(sql, opts) }
         return result
       end
 

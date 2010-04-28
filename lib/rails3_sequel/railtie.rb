@@ -10,7 +10,9 @@ require "action_controller/railtie"
 
 require 'sequel'
 require File.dirname(__FILE__) + '/database'
+require File.dirname(__FILE__) + '/railties/controller_runtime'
 require File.dirname(__FILE__) + '/railties/log_subscriber'
+require File.dirname(__FILE__) + '/railties/benchmarking_mixin'
 
 module Rails
   module Sequel
@@ -34,9 +36,13 @@ module Rails
         ::Sequel::Model.db.loggers << ::Rails.logger
       end
 
+      initializer 'sequel.log_runtime' do |app|
+        ActionController::Base.send :include, Rails::Sequel::Railties::ControllerRuntime
+      end
+
       config.after_initialize do
         ::Sequel::Model.plugin :active_model
-        ::Sequel::Database.adapter.extend Rails::Sequel::Benchmarking
+        ::Sequel::Model.db.extend Rails::Sequel::Benchmarking
       end
     end
   end
