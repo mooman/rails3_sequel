@@ -3,10 +3,14 @@ class <%= migration_class_name %> < Sequel::Migration
     create_table :<%= table_name %> do
       primary_key :id
 
-    <% if options[:timestamps] then %>
+<% for a in attributes do -%>
+      <%= a.type %> :<%= a.name %>
+<% end -%>
+
+  <% if options[:timestamps] then -%>
       DateTime :created_at
       DateTime :updated_at
-    <% end %>
+<% end -%>
     end
   end
 

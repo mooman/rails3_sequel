@@ -9,6 +9,7 @@ module Sequel
 
       class_option :migration, :type => :boolean
       class_option :timestamps, :type => :boolean
+      # TODO: parent option?
 
       def create_migration_file
         return unless options[:migration] && options[:parent].nil?
