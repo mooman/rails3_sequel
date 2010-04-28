@@ -15,7 +15,8 @@ module Rails
           end
 
           # defaults
-          env['loggers'] = [::Rails.logger]
+          # using log subscriber instead
+          # env['loggers'] = [::Rails.logger]
         end
       end
 
