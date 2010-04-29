@@ -17,13 +17,13 @@ require File.dirname(__FILE__) + '/railties/benchmarking_mixin'
 module Rails
   module Sequel
     class Railtie < Rails::Railtie
+      log_subscriber :sequel, ::Sequel::Railties::LogSubscriber.new
+
       config.generators.orm :sequel, :migration => true, :timestamps => false
 
       rake_tasks do
         load File.dirname(__FILE__) + '/railties/database.rake'
       end
-
-      log_subscriber :sequel, Rails::Sequel::Railties::LogSubscriber.new
 
       initializer 'sequel.initialize_database' do |app|
         Rails::Sequel::Database.configurations = app.config.database_configuration

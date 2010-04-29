@@ -22,6 +22,9 @@ module Rails
 
         # by default, Rails.logger will be used
         # if users want additional loggers, they can specify through the yml file
+        def logger
+          ::Sequel::Model.db.loggers.first
+        end
       end
     end
   end

@@ -7,7 +7,7 @@ class <%= migration_class_name %> < Sequel::Migration
       <%= a.type %> :<%= a.name %>
 <% end -%>
 
-  <% if options[:timestamps] then -%>
+<% if options[:timestamps] then -%>
       DateTime :created_at
       DateTime :updated_at
 <% end -%>
