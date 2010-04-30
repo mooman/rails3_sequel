@@ -1,10 +1,12 @@
 module Rails
   module Sequel
     module Benchmarking
-      def execute (sql, opts={})
+      def execute (sql, opts={}, &block)
         result = nil
         @runtime ||= 0
-        @runtime += Benchmark.ms { result = super(sql, opts) }
+        ActiveSupport::Notifications.instrument('sequel.sql', :sql => sql, :name => 'SQL') do
+          @runtime += Benchmark.ms { result = super(sql, opts, &block) }
+        end
         return result
       end
 

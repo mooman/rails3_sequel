@@ -16,14 +16,13 @@ module Rails
           debug "  #{name}  #{sql}"
         end
 
-        def odd?
-          @odd_or_even = !@odd_or_even
-        end
-
         # by default, Rails.logger will be used
         # if users want additional loggers, they can specify through the yml file
-        def logger
-          ::Sequel::Model.db.loggers.first
+
+        private
+
+        def odd?
+          @odd_or_even = !@odd_or_even
         end
       end
     end

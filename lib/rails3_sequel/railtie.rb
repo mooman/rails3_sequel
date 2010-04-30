@@ -17,7 +17,7 @@ require File.dirname(__FILE__) + '/railties/benchmarking_mixin'
 module Rails
   module Sequel
     class Railtie < Rails::Railtie
-      log_subscriber :sequel, ::Sequel::Railties::LogSubscriber.new
+      log_subscriber :sequel, Rails::Sequel::Railties::LogSubscriber.new
 
       config.generators.orm :sequel, :migration => true, :timestamps => false
 
@@ -30,13 +30,7 @@ module Rails
         Rails::Sequel::Database.connect
       end
 
-      initializer 'sequel.logger' do 
-        # in additition to user specified logger in the database.yml (if any),
-        # also add the Rails logger
-        ::Sequel::Model.db.loggers << ::Rails.logger
-      end
-
-      initializer 'sequel.log_runtime' do |app|
+      initializer 'sequel.log_runtime' do
         ActionController::Base.send :include, Rails::Sequel::Railties::ControllerRuntime
       end
 
