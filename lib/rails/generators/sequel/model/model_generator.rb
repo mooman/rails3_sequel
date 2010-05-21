@@ -7,6 +7,7 @@ module Sequel
 
       check_class_collision
 
+      class_option :autoincrement, :type => :boolean
       class_option :migration, :type => :boolean
       class_option :timestamps, :type => :boolean
       # TODO: parent option?

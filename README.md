@@ -1,44 +1,100 @@
 Rails 3 Sequel integration
 ==========================
 
-Based partially on rails_sequel by Piotr Usewicz: http://github.com/pusewicz/rails_sequel
-
-*What (kindda) works so far:*
+*What works so far:*
 
 + Generators
   - Models
   - Migrations
   - Observers
+  - Scaffolding Controllers - Sequel specific methods
 
 + Rake tasks
   - mostly everything except anything that has to do with database creation (db:create, test:prepare, etc)
 
 + Railties
-  - database.yml configuration
+  - uses database.yml configuration
   - db connection
   - query logging
-  - controller logging (with crude timing)
+  - controller logging
   - sane default sequel options and plugins for Rails
+
++ Gemspec
 
 *What is still need done:*
 
-+ Testing
-  - haven't really tested much
-
++ More testing
 + i18n
-+ Session
-+ User define options
-+ Gem
++ Session Store
 + more rake tasks
 
-Usage
------
+Installation
+------------
 
-For now, please put this in vendor/plugins path and include (absolute filename) the railtie.rb in your environment. In the future, i will make a gem. 
+Build from the gem spec:
 
-Then you can use as you would with ActiveRecord, but please note that this still needs a lot of work.
+    gem build rails3_sequel.gemspec
+
+Install:
+
+    gem install rails3_sequel-x.x.x.gem
+
+Usage - Railties
+----------------
+
+In your config/application.rb, take out the require "all" line and choose what frameworks you want to include like this:
+
+    require "action_controller/railtie"
+    require "action_mailer/railtie"
+    require "active_resource/railtie"
+    require "rails/test_unit/railtie"
+
+    # most importantly :)
+    require 'rails3_sequel/railtie'
+
+This way Rails wont load activerecord.
+
+Config options:
+
+    # set false to turn off Rails SQL logging
+    # true by default
+    config.rails_fancy_pants_logging = false
+
+    # specify your own loggers
+    config.loggers << Logger.new('test.log')
+
+    # shortcut to log_warn_duration in Sequel
+    config.log_warn_duration
+
+These options may be useful in the production configuration file. Rails does not log any SQL in production mode, but you may want to still log long running queries or queries with errors (which are supported by Sequel).
+
+Rake tasks usage.... todo
+
+Usage - Generators
+------------------
+
+Basics:
+
+    rails g scaffold cat name:String:pk specie:String:pk age:Integer
+
+Will use name and specie as composite primary key.
+
+
+Generator options (set in config/application.rb):
+
+    config.generators do |g|
+      g.orm :sequel, :autoincrement => true, :migration => true, :timestamps => false
+
+The above will always generate migration files, with autoincrement/serial field named "id", but no automatic timstamp fields updated_at or created_at.
+
+more to come...
 
 License
 -------
 
 MIT
+
+Credits
+-------
+
+Based partially on rails_sequel by Piotr Usewicz: http://github.com/pusewicz/rails_sequel

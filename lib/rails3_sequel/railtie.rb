@@ -1,4 +1,3 @@
-require 'pp'
 require 'rails'
 require 'active_model/railtie'
 
@@ -9,20 +8,24 @@ require 'active_model/railtie'
 require "action_controller/railtie"
 
 require 'sequel'
-require File.dirname(__FILE__) + '/database'
-require File.dirname(__FILE__) + '/railties/controller_runtime'
-require File.dirname(__FILE__) + '/railties/log_subscriber'
-require File.dirname(__FILE__) + '/railties/benchmarking_mixin'
+require 'rails3_sequel/database'
+require 'rails3_sequel/logging'
+require 'rails3_sequel/railties/controller_runtime'
+require 'rails3_sequel/railties/log_subscriber'
 
 module Rails
   module Sequel
     class Railtie < Rails::Railtie
       log_subscriber :sequel, Rails::Sequel::Railties::LogSubscriber.new
 
-      config.generators.orm :sequel, :migration => true, :timestamps => false
+      config.generators.orm :sequel, :autoincrement => false, :migration => true, :timestamps => false
+
+      config.log_warn_duration = nil
+      config.rails_fancy_pants_logging = true
+      config.loggers = []
 
       rake_tasks do
-        load File.dirname(__FILE__) + '/railties/database.rake'
+        load 'rails3_sequel/railties/database.rake'
       end
 
       initializer 'sequel.initialize_database' do |app|
@@ -30,13 +33,25 @@ module Rails
         Rails::Sequel::Database.connect
       end
 
-      initializer 'sequel.log_runtime' do
-        ActionController::Base.send :include, Rails::Sequel::Railties::ControllerRuntime
+      initializer 'sequel.logging' do |app|
+        ::Sequel::Model.db.log_warn_duration = 0.1
+
+        if app.config.rails_fancy_pants_logging then
+          ::Sequel::Model.db.loggers << Rails.logger
+          ::Sequel::Model.db.extend Rails::Sequel::Logging
+          ActionController::Base.send :include, Rails::Sequel::Railties::ControllerRuntime
+        end
+
+        # additional loggers
+        ::Sequel::Model.db.loggers.concat(app.config.loggers)
       end
 
       config.after_initialize do
+        # set some sensible Rails defaults
         ::Sequel::Model.plugin :active_model
-        ::Sequel::Model.db.extend Rails::Sequel::Benchmarking
+        ::Sequel::Model.plugin :validation_helpers
+
+        ::Sequel::Model.raise_on_save_failure = false
       end
     end
   end

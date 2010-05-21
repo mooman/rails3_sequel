@@ -3,7 +3,7 @@ module Rails
     module Railties
       class LogSubscriber < Rails::LogSubscriber
         def sql(event)
-          name = '%s (%.1fms)' % [event.payload[:name], event.duration]
+          name = '%s (%.1fms)' % [event.payload[:name], event.payload[:duration]]
           sql  = event.payload[:sql].squeeze(' ')
 
           if odd?
@@ -13,7 +13,7 @@ module Rails
             name = color(name, :magenta, true)
           end
 
-          debug "  #{name}  #{sql}"
+          warn "  #{name}  #{sql}"
         end
 
         # by default, Rails.logger will be used

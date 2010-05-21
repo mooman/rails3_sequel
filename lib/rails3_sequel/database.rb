@@ -13,10 +13,6 @@ module Rails
             when 'sqlite3'    then 'sqlite'
             else env['adapter']
           end
-
-          # defaults
-          # using log subscriber instead
-          # env['loggers'] = [::Rails.logger]
         end
       end
 
@@ -24,11 +20,6 @@ module Rails
       def self.connect
         ::Sequel.connect(self.configurations[Rails.env])
       end
-
-      # Returns loaded database.yml configuration for current environment
-  #    def self.config
-  #      @config ||= YAML::load(ERB.new(IO.read(File.join(Rails.root, "config", "database.yml"))).result)[Rails.env].with_indifferent_access
-  #    end
     end
   end
 end
