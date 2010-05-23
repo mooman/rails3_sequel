@@ -33,13 +33,7 @@ Rails 3 Sequel integration
 Installation
 ------------
 
-Build from the gem spec:
-
-    gem build rails3_sequel.gemspec
-
-Install:
-
-    gem install rails3_sequel-x.x.x.gem
+    gem install rails3_sequel
 
 Usage - Railties
 ----------------
