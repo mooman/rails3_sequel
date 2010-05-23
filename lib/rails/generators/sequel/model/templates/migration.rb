@@ -6,7 +6,7 @@ Class.new(Sequel::Migration) do
 <% end -%>
 
 <% for a in attributes do -%>
-      <%= a.definition %>
+      <%= a.create_definition %>
 <% end -%>
 <% if options[:timestamps] then -%>
       DateTime :created_at

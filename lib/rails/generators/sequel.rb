@@ -2,6 +2,8 @@ require 'rails/generators/named_base'
 require 'rails/generators/migration'
 
 require 'rails/generators/sequel/active_model'
+
+# override Rails::Generators::GeneratedAttribute
 require 'rails/generators/sequel/generated_attribute'
 
 module Sequel
@@ -27,7 +29,7 @@ module Sequel
         self.attributes = (attributes || []).map do |key_value|
           name, type, pk = key_value.split(':')
           @primary_keys << name unless pk.nil?
-          GeneratedAttribute.new(name, type)
+          Rails::Generators::GeneratedAttribute.new(name, type)
         end
       end
 

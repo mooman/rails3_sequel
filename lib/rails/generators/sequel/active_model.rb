@@ -25,7 +25,7 @@ module Sequel
       end
 
       def update_attributes(params=nil)
-        "#{name}.save(#{params}, :changed => true)"
+        "#{name}.update(#{params}) != false"
       end
 
       def errors

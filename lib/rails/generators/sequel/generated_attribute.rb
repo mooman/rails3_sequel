@@ -1,4 +1,4 @@
-module Sequel
+module Rails
   module Generators
     class GeneratedAttribute
       attr_accessor :name, :type
@@ -8,11 +8,19 @@ module Sequel
         @type = type.to_sym
       end
 
-      def definition
+      def create_definition
         case type
-          when :text then "String :#{name}, :text => true"
-          when :boolean then "TrueClass :#{name}"
+          when :Text then "String :#{name}, :text => true"
+          when :Boolean then "TrueClass :#{name}"
           else "#{type} :#{name}"
+        end
+      end
+
+      def alter_definition
+        case type
+          when :Text then "String, :text => true"
+          when :Boolean then "TrueClass"
+          else type
         end
       end
 
@@ -22,8 +30,8 @@ module Sequel
           when :DateTime, :Time                                   then :datetime_select
           when :Date                                              then :date_select
           when :String                                            then :text_field
-          when :text                                              then :text_area
-          when :boolean, :TrueClass, :FalseClass                  then :check_box
+          when :Text                                              then :text_area
+          when :Boolean, :TrueClass, :FalseClass                  then :check_box
           else
             :text_field
         end
