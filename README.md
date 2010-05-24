@@ -1,17 +1,17 @@
 Rails 3 Sequel integration
 ==========================
 
-*What works so far:*
+Features:
 
 + Generators
-  - Models
-  - Migrations
+  - Models - models and migrations
+  - Migrations - for table alters
   - Scaffold
     - Controller uses Sequel specific methods.
-    - Views recognize migration data types
+    - Views recognize migration data types.
 
 + Rake tasks
-  - mostly everything except anything that has to do with database creation (db:create, test:prepare, etc)
+  - mostly everything except db:test:prepare, db:setup, and db:create:all (should be ready next version)
 
 + Railties
   - uses database.yml configuration
@@ -29,11 +29,18 @@ Rails 3 Sequel integration
 + Session Store
 + Observers
 + more rake tasks
++ adapter specific after_create proc
 
 Installation
 ------------
 
     gem install rails3_sequel
+
+OR, in your Gemfile
+
+    gem 'rails3_sequel'
+
+then run bundle install.
 
 Usage - Railties
 ----------------
@@ -60,12 +67,16 @@ Config options:
     config.loggers << Logger.new('test.log')
 
     # shortcut to log_warn_duration in Sequel
+    # you can also set this option in database.yml
     config.log_warn_duration
 
 These options may be useful in the production configuration file. Rails does not log any SQL in production mode, but you may want to still log long running queries or queries with errors (which are supported by Sequel).
 
 Rake tasks usage:
 
+    db:create
+      Creates the database defined in your Rails environment. Unlike AR, this does not create test database with your development. You must specify your Rails environment manually.
+      ex. RAILS_ENV=test rake db:create
     db:migrate
       You know what this does.
     db:migrate:up
@@ -86,6 +97,8 @@ Rake tasks usage:
       Shows the current migration version
     db:setup, db:test:load, db:test:purge
       Not implemented yet
+
+Please note that db:create currently only works with PostgreSQL, MySQL, and SQLite. If you have other DBs, please contribute if you can!
 
 
 Usage - Generators
@@ -124,6 +137,13 @@ Example:
     
     rails g model dog name:String specie:String --autoincrement
 
+
+BUGS / ISSUES / QUESTIONS
+-------------------------
+
+Please feel free to email me with any issues or message me on github. janechii at gmail.
+
+
 License
 -------
 
@@ -133,3 +153,4 @@ Credits
 -------
 
 Based partially on rails_sequel by Piotr Usewicz: http://github.com/pusewicz/rails_sequel
+Thanks to ActiveRecord's and dm-rails' railties

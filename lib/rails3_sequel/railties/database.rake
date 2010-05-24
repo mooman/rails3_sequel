@@ -24,12 +24,13 @@ namespace :db do
 
   namespace :create do
     task :all do
+      # cant choose which db to create yet.
       puts 'Pending implementation'
     end
   end
 
-  task :create do
-    puts 'Pending implementation'
+  task :create => :environment do
+    Rails::Sequel::Database.create_database
   end
 
   namespace :migrate do

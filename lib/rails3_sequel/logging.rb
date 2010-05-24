@@ -9,7 +9,7 @@ module Rails
           :name => 'SQL',
           :duration => duration * 1000
         )
-        super(duration, message)
+        super
       end
 
       def log_each (level, message)
