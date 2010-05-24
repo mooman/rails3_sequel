@@ -34,8 +34,6 @@ module Rails
       end
 
       initializer 'sequel.logging' do |app|
-        ::Sequel::Model.db.log_warn_duration = 0.1
-
         if app.config.rails_fancy_pants_logging then
           ::Sequel::Model.db.loggers << Rails.logger
           ::Sequel::Model.db.extend Rails::Sequel::Logging

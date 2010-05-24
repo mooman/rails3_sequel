@@ -90,7 +90,7 @@ Rake tasks usage:
     db:schema:dump
       Uses Sequel's schema_dumper. Stores output in db/schema.rb.
     db:schema:load
-      Does not work yet, but you can use just run the migrator on the schema file.
+      Does not work yet, but you can just run Sequel::Migrator on the schema file.
     db:seed
       Load the seed data from db/seeds.rb
     db:version
@@ -119,7 +119,7 @@ Will use name and specie as composite primary keys. Data types are as specified 
 
 Example:
 
-   rails g scaffold cat name:String:pk description:Text ugly:Boolean location:geocode
+    rails g scaffold cat name:String:pk description:Text ugly:Boolean location:geocode
 
 Note that the "location" field's type will not be translated and geocode will be used as the type in the database.
 
@@ -152,5 +152,6 @@ MIT
 Credits
 -------
 
-Based partially on rails_sequel by Piotr Usewicz: http://github.com/pusewicz/rails_sequel
-Thanks to ActiveRecord's and dm-rails' railties
++ Piotr Usewicz for rails_sequel (http://github.com/pusewicz/rails_sequel)
++ Jeremy Evans for Sequel and pointers he gave for this plugin
++ Many thanks to ActiveRecord's and dm-rails' railties, and everyone at Rails 3 team for making this even possible

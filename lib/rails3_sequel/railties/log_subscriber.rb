@@ -13,7 +13,7 @@ module Rails
             name = color(name, :magenta, true)
           end
 
-          warn "  #{name}  #{sql}"
+          debug "  #{name}  #{sql}"
         end
 
         # by default, Rails.logger will be used
