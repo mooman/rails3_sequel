@@ -4,7 +4,7 @@ module Rails
       def log_duration (duration, message)
         @controller_runtime ||= 0
         @controller_runtime += duration
-        ActiveSupport::Notifications.instrument('sequel.sql', 
+        ActiveSupport::Notifications.instrument('sql.sequel', 
           :sql => message,
           :name => 'SQL',
           :duration => duration * 1000

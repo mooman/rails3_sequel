@@ -2,8 +2,8 @@ require 'rake'
 
 Gem::Specification.new do |s|
   s.name = 'rails3_sequel'
-  s.version = '0.2.1'
-  s.date = '2010-05-24'
+  s.version = '0.2.2'
+  s.date = '2010-05-29'
   s.author = 'Rachot Moragraan'
   s.email = 'janechii@gmail.com'
   s.homepage = 'http://github.com/mooman/rails3_sequel'
