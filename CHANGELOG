@@ -2,4 +2,5 @@
 
 * Can now do adapter specific database configurations. Specifically this addressed Postgres schema_search_path option.
 * Create database in Postgres will also create schema.
+* MySql and SQLite adapters
 * Rake tasks db:create:all, db:drop:all, db:drop

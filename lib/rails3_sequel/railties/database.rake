@@ -29,8 +29,9 @@ namespace :db do
   end
   
   desc 'Creates the database defined in your Rails environment. Unlike AR, this does not create test database with your development. You must specify your Rails environment manually.'
-  task :create => :environment do
-    Rails::Sequel::Database.create_database(Rails.env)
+  task :create, :env, :needs => :environment do |t, args|
+    args.with_defaults(:env => Rails.env)
+    Rails::Sequel::Database.create_database(args.env)
   end
 
   namespace :drop do
@@ -40,8 +41,10 @@ namespace :db do
   end
 
   desc 'Opposite of db:create'
-  task :drop => :environment do
-    Rails::Sequel::Database.drop_database(Rails.env)
+  task :drop, :env, :needs => :environment do |t, args|
+    args.with_defaults(:env => Rails.env)
+    # TODO: what happens if database doesn't exist?
+    Rails::Sequel::Database.drop_database(args.env)
   end
 
   namespace :migrate do
@@ -126,9 +129,8 @@ namespace :db do
 
     desc 'Empty the test database'
     task :purge => :environment do
-      # TODO: what happens if database doesn't exist?
-      Rails::Sequel::Database.drop_database('test')
-      Rails::Sequel::Database.create_database('test')
+      Rake::Task['db:drop'].invoke('test')
+      Rake::Task['db:create'].invoke('test')
     end
   end
 

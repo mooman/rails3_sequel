@@ -32,8 +32,8 @@ module Rails
 
         # convenient methods
 
-        def connect (env, options = {}, &block)
-          adapter(env).connect(options, &block)
+        def connect (env, options = {})
+          adapter(env).connect(options)
         end
 
         def create_database (env, options = {})
@@ -42,7 +42,7 @@ module Rails
 
         def create_all (options = {})
           for env,config in configurations do
-            next unless config[:database]
+            next unless config['database']
             create_database(env, options)
           end
         end
@@ -53,7 +53,7 @@ module Rails
 
         def drop_all
           for env,config in configurations do
-            next unless config[:database]
+            next unless config['database']
             drop_database(env)
           end
         end

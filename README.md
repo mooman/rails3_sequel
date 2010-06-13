@@ -1,6 +1,8 @@
 Rails 3 Sequel integration
 ==========================
 
+**There has been some confusions with how the logging works. if you are using Rails 3 beta 3, please use the released gem or the beta3 branch on github. if you are using edge Rails 3, then please use this master branch**
+
 Features:
 
 + Generators
@@ -23,12 +25,13 @@ Features:
 
 *What is still need done:*
 
-+ More testing
++ Write tests
 + i18n
 + Session Store
 + Observers
 + more rake tasks
 + adapter specific encoding / charset options
++ namespaced config (config.sequel.xxxx)
 
 Installation
 ------------
@@ -40,6 +43,8 @@ OR, in your Gemfile
     gem 'rails3_sequel'
 
 then run bundle install.
+
+Please see the note at the top of this README for what version you should use.
 
 Usage - Railties
 ----------------
@@ -75,7 +80,7 @@ Rake tasks usage:
 
     db:create
       Creates the database defined in your Rails environment. Unlike AR, this does not create test database with your development. You must specify your Rails environment manually.
-      ex. RAILS_ENV=test rake db:create
+      ex. rake db:create[test] or RAILS_ENV=test rake db:create
     db:create:all
       Does the above for all environments
     db:migrate

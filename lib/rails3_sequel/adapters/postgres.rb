@@ -10,11 +10,7 @@ module Rails
 
         def connect (options = {})
           options = parse_special_options(options)
-          if block_given? then
-            ::Sequel.connect(@config.merge(options)) { |db| yield db }
-          else
-            ::Sequel.connect(@config.merge(options))
-          end
+          ::Sequel.connect(@config.merge(options))
         end
 
         # from ActiveRecord
