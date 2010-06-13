@@ -11,7 +11,6 @@ Features:
     - Views recognize migration data types.
 
 + Rake tasks
-  - mostly everything except db:test:prepare, db:setup, and db:create:all (should be ready next version)
 
 + Railties
   - uses database.yml configuration
@@ -29,7 +28,7 @@ Features:
 + Session Store
 + Observers
 + more rake tasks
-+ adapter specific after_create proc
++ adapter specific encoding / charset options
 
 Installation
 ------------
@@ -77,6 +76,8 @@ Rake tasks usage:
     db:create
       Creates the database defined in your Rails environment. Unlike AR, this does not create test database with your development. You must specify your Rails environment manually.
       ex. RAILS_ENV=test rake db:create
+    db:create:all
+      Does the above for all environments
     db:migrate
       You know what this does.
     db:migrate:up
@@ -90,13 +91,18 @@ Rake tasks usage:
     db:schema:dump
       Uses Sequel's schema_dumper. Stores output in db/schema.rb.
     db:schema:load
-      Does not work yet, but you can just run Sequel::Migrator on the schema file.
+      Uses Sequel's migration. Reads from db/schema.rb.
     db:seed
-      Load the seed data from db/seeds.rb
+      Load the seed data from db/seeds.rb.
     db:version
-      Shows the current migration version
-    db:setup, db:test:load, db:test:purge
-      Not implemented yet
+      Shows the current migration version.
+    db:setup
+      Create the database, load the schema, and initialize with the seed data.
+    db:test:load
+      Recreate the test database from the current schema.rb.
+    db:test:purge
+      Empty the test database.
+      
 
 Please note that db:create currently only works with PostgreSQL, MySQL, and SQLite. If you have other DBs, please contribute if you can!
 

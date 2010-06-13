@@ -30,7 +30,7 @@ module Rails
 
       initializer 'sequel.initialize_database' do |app|
         Rails::Sequel::Database.configurations = app.config.database_configuration
-        Rails::Sequel::Database.connect
+        Rails::Sequel::Database.connect(Rails.env)
       end
 
       initializer 'sequel.logging' do |app|

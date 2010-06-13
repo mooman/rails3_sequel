@@ -23,14 +23,25 @@ namespace :db do
   end
 
   namespace :create do
-    task :all do
-      # cant choose which db to create yet.
-      puts 'Pending implementation'
+    task :all => :environment do
+      Rails::Sequel::Database.create_all
+    end
+  end
+  
+  desc 'Creates the database defined in your Rails environment. Unlike AR, this does not create test database with your development. You must specify your Rails environment manually.'
+  task :create => :environment do
+    Rails::Sequel::Database.create_database(Rails.env)
+  end
+
+  namespace :drop do
+    task :all => :environment do
+      Rails::Sequel::Database.drop_all
     end
   end
 
-  task :create => :environment do
-    Rails::Sequel::Database.create_database
+  desc 'Opposite of db:create'
+  task :drop => :environment do
+    Rails::Sequel::Database.drop_database(Rails.env)
   end
 
   namespace :migrate do
@@ -85,15 +96,18 @@ namespace :db do
         file.puts Sequel::Model.db.dump_schema_migration
       end
 
-      # needs also away to store current schema version
+      # TODO: needs also away to store current schema version
     end
 
     desc "Load a schema.rb file into the database."
-    task :load => :environment do
+    task :load, :db, :needs => :environment do |t, args|
+      args.with_defaults(:db => Sequel::Model.db)
+
       file = ENV['SCHEMA'] || "#{Rails.root}/db/schema.rb"
       if File.exists?(file) then
-        load(file)
-        # probably needs to also run "up: here
+        Sequel.extension :migration
+        schema_migration = eval(File.read(file))
+        schema_migration.apply(args.db, :up)
       else
         abort "#{file} doesn't exist."
       end
@@ -103,14 +117,21 @@ namespace :db do
   namespace :test do
     desc "Recreate the test database from the current schema.rb"
     task :load => 'db:test:purge' do
-      Sequel.connect(Rails::Sequel::Database.configurations['test'])
-      Rake::Task['db:schema:load'].invoke
+      db = Rails::Sequel::Database.connect('test')
+      Rake::Task['db:schema:load'].invoke(db)
     end
+
+    desc 'Runs db:test:load'
+    task :prepare => :load
 
     desc 'Empty the test database'
     task :purge => :environment do
-      raise NotImplementedError
+      # TODO: what happens if database doesn't exist?
+      Rails::Sequel::Database.drop_database('test')
+      Rails::Sequel::Database.create_database('test')
     end
   end
 
 end
+
+task 'test:prepare' => 'db:test:prepare'
