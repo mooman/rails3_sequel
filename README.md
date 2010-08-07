@@ -1,7 +1,7 @@
 Rails 3 Sequel integration
 ==========================
 
-**There has been some confusions with how the logging works. if you are using Rails 3 beta 3, please use the released gem or the beta3 branch on github. if you are using edge Rails 3, then please use this master branch**
+** This plug-in will no longer be supported. Please use [brasten/sequel-raills](http://github.com/brasten/sequel-rails) instead. I thank everyone for using this and the valuabe inputs :) **
 
 Features:
 
